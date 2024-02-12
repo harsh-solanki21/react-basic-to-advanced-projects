@@ -25,6 +25,7 @@
 
 .gameCell {
   font-size: 4rem;
+  font-weight: bolder;
   cursor: pointer;
   padding: 1rem 2rem;
   width: 120px;

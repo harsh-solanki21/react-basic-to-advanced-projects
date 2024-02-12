@@ -6,7 +6,8 @@ import Redo from '../assets/Redo'
 type playerState = 'O' | 'X'
 
 const TicTacToe = () => {
-  const initialState: string[] = ['', '', '', '', '', '', '', '', '']
+  const historyState: number[] = Array(9).fill(-1)
+  const initialState: string[] = Array(9).fill('')
   const victoryStreaks: number[][] = [
     [0, 1, 2],
     [3, 4, 5],
@@ -18,6 +19,7 @@ const TicTacToe = () => {
     [2, 4, 6],
   ]
 
+  const [historyBoard, setHistoryBoard] = useState<number[]>(historyState)
   const [board, setBoard] = useState<string[]>(initialState)
   const [player, setPlayer] = useState<playerState>('O')
   const [moveCount, setMoveCount] = useState<number>(0)
@@ -25,22 +27,24 @@ const TicTacToe = () => {
 
   const markCell = (cell: number) => {
     setBoard(
-      board.map((value, index) => {
+      board.map((value: string, index: number) => {
         if (index === cell && value === '') {
           return player
         }
         return value
       })
     )
-    setMoveCount((prevMoveCount) => prevMoveCount + 1)
+
+    const updatedHistoryBoard: number[] = [...historyBoard]
+    updatedHistoryBoard[cell] = moveCount
+    setHistoryBoard(updatedHistoryBoard)
+    setMoveCount((prevMoveCount: number) => prevMoveCount + 1)
   }
 
   const checkVictory = () => {
     victoryStreaks.forEach((pattern: number[]) => {
       const firstPlayer = board[pattern[0]]
-      if (firstPlayer === '') {
-        return
-      }
+      if (firstPlayer === '') return
 
       let foundWinningStreak = true
       pattern.forEach((index) => {
@@ -55,26 +59,51 @@ const TicTacToe = () => {
     })
   }
 
-  const matchTied = () => {
-    setResult('⚡ Match Tied! ⚡')
-  }
-
   const handleReset = () => {
+    setHistoryBoard(historyState)
     setBoard(initialState)
     setPlayer('O')
     setMoveCount(0)
     setResult(null)
   }
 
-  const handleUndo = () => {}
-  const handleRedo = () => {}
+  const handleUndo = () => {
+    if (moveCount > 0) {
+      const lastMoveIndex: number = historyBoard.lastIndexOf(moveCount - 1)
+
+      const undoBoard: string[] = [...board]
+      undoBoard[lastMoveIndex] = ''
+      setBoard(undoBoard)
+
+      const undoHistoryBoard: number[] = [...historyBoard]
+      undoHistoryBoard[lastMoveIndex] = -1
+      setHistoryBoard(undoHistoryBoard)
+
+      setMoveCount((prevMoveCount: number) => prevMoveCount - 1)
+      setPlayer(player === 'X' ? 'O' : 'X')
+      setResult(null)
+    }
+  }
+
+  const handleRedo = () => {
+    // const nextMoveIndex = historyBoard.indexOf(moveCount + 1)
+    // if (nextMoveIndex !== -1 && nextMoveIndex < board.length) {
+    //   const redoBoard = [...board]
+    //   redoBoard[nextMoveIndex] = player
+    //   setBoard(redoBoard)
+    //   setMoveCount((prevMoveCount) => prevMoveCount + 1)
+    //   setPlayer(player === 'X' ? 'O' : 'X')
+    //   setResult(null)
+    // }
+  }
 
   useEffect(() => {
-    if (moveCount >= 6) {
+    if (moveCount > 4) {
       checkVictory()
     }
-    if (moveCount === 9) {
-      matchTied()
+    console.log(result)
+    if (moveCount === 9 && !result) {
+      setResult('⚡ Match Tied! ⚡')
     }
 
     if (!result) {
