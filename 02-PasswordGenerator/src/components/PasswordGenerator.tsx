@@ -101,37 +101,39 @@ const PasswordGenerator = () => {
           />
           <p>Length: {sliderValue}</p>
         </div>
-        <div className={styles.checkboxContainer}>
-          <span className={styles.checkbox}>
-            <input
-              type='checkbox'
-              name='characters'
-              value='characters'
-              checked={checkboxes.characters}
-              onChange={() => handleCheckboxChange('characters')}
-            />
-            &nbsp; Characters
-          </span>
-          <span className={styles.checkbox}>
-            <input
-              type='checkbox'
-              name='numbers'
-              value='numbers'
-              checked={checkboxes.numbers}
-              onChange={() => handleCheckboxChange('numbers')}
-            />
-            &nbsp; Numbers
-          </span>
-          <span className={styles.checkbox}>
-            <input
-              type='checkbox'
-              name='symbols'
-              value='symbols'
-              checked={checkboxes.symbols}
-              onChange={() => handleCheckboxChange('symbols')}
-            />
-            &nbsp; Symbols
-          </span>
+        <div>
+          <div className={styles.checkboxContainer}>
+            <span className={styles.checkbox}>
+              <input
+                type='checkbox'
+                name='characters'
+                value='characters'
+                checked={checkboxes.characters}
+                onChange={() => handleCheckboxChange('characters')}
+              />
+              &nbsp; Characters
+            </span>
+            <span className={styles.checkbox}>
+              <input
+                type='checkbox'
+                name='numbers'
+                value='numbers'
+                checked={checkboxes.numbers}
+                onChange={() => handleCheckboxChange('numbers')}
+              />
+              &nbsp; Numbers
+            </span>
+            <span className={styles.checkbox}>
+              <input
+                type='checkbox'
+                name='symbols'
+                value='symbols'
+                checked={checkboxes.symbols}
+                onChange={() => handleCheckboxChange('symbols')}
+              />
+              &nbsp; Symbols
+            </span>
+          </div>
           {error ? <p className={styles.error}>{error}</p> : null}
         </div>
       </div>
